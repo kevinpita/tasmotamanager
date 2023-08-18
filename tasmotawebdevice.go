@@ -31,12 +31,16 @@ func NewWebDevice(deviceUrl string, username string, password string) *TasmotaWe
 
 func (t *TasmotaWebDevice) SendCommand(c string) (map[string]string, error) {
 	urlRequest := fmt.Sprintf("%scmnd=%s", t.Url, url.QueryEscape(c))
-	resp, err := http.Get(urlRequest)
-	if err != nil {
-		return nil, fmt.Errorf("sendcommand get: %w", err)
+	resp, errReq := http.Get(urlRequest)
+	if errReq != nil {
+		return nil, fmt.Errorf("sendcommand get: %w", errReq)
 	}
 	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
+
+	body, errRead := io.ReadAll(resp.Body)
+	if errRead != nil {
+		return nil, fmt.Errorf("sendcommand readall: %w", errRead)
+	}
 
 	var result map[string]string
 	errJson := json.Unmarshal(body, &result)
