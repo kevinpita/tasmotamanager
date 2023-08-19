@@ -14,25 +14,24 @@ type TasmotaWebDevice struct {
 }
 
 func NewWebDevice(deviceUrl string, username string, password string) (*TasmotaWebDevice, error) {
-	url, errParse := url.Parse(deviceUrl)
+	u, errParse := url.Parse(deviceUrl)
 	if errParse != nil {
 		return nil, fmt.Errorf("newwebdevice parse: %w", errParse)
+	}
 
-	}
 	if !strings.HasSuffix(deviceUrl, "/") {
-		url.Path += "/"
+		u.Path += "/"
 	}
-	url.Path += "cm"
+	u.Path += "cm"
 
 	if len(username) != 0 && len(password) != 0 {
-		q := url.Query()
+		q := u.Query()
 		q.Set("user", username)
 		q.Set("password", password)
-		url.RawQuery = q.Encode()
-
+		u.RawQuery = q.Encode()
 	}
 
-	return &TasmotaWebDevice{url}, nil
+	return &TasmotaWebDevice{u}, nil
 }
 
 func (t *TasmotaWebDevice) SendCommand(c string) (map[string]string, error) {
