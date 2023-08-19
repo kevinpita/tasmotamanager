@@ -2,6 +2,8 @@ package tasmotamanager
 
 import "testing"
 
+// TODO: Tests should have a mock server that could give a json response so it can be compared too
+
 func TestNoLoginDeviceBackslash(t *testing.T) {
 	const expected = "http://192.168.1.2/cm?cmnd=Power+off"
 	device, errDevice := NewWebDevice("http://192.168.1.2/", "", "")
