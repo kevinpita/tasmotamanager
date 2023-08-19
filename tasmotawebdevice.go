@@ -10,28 +10,37 @@ import (
 )
 
 type TasmotaWebDevice struct {
-	Url string
+	Url *url.URL
 }
 
-func NewWebDevice(deviceUrl string, username string, password string) *TasmotaWebDevice {
-	var baseUrl string
-	if strings.HasSuffix(deviceUrl, "/") {
-		baseUrl = fmt.Sprintf("%scm?", deviceUrl)
-	} else {
-		baseUrl = fmt.Sprintf("%s/cm?", deviceUrl)
+func NewWebDevice(deviceUrl string, username string, password string) (*TasmotaWebDevice, error) {
+	url, errParse := url.Parse(deviceUrl)
+	if errParse != nil {
+		return nil, fmt.Errorf("newwebdevice parse: %w", errParse)
+
 	}
+	if !strings.HasSuffix(deviceUrl, "/") {
+		url.Path += "/"
+	}
+	url.Path += "cm"
 
 	if len(username) != 0 && len(password) != 0 {
-		auth := fmt.Sprintf("user=%s&password=%s", username, password)
-		baseUrl = fmt.Sprintf("%s%s&", baseUrl, url.QueryEscape(auth))
+		q := url.Query()
+		q.Set("user", username)
+		q.Set("password", password)
+		url.RawQuery = q.Encode()
+
 	}
 
-	return &TasmotaWebDevice{baseUrl}
+	return &TasmotaWebDevice{url}, nil
 }
 
 func (t *TasmotaWebDevice) SendCommand(c string) (map[string]string, error) {
-	urlRequest := fmt.Sprintf("%scmnd=%s", t.Url, url.QueryEscape(c))
-	resp, errReq := http.Get(urlRequest)
+	q := t.Url.Query()
+	q.Set("cmnd", c)
+	t.Url.RawQuery = q.Encode()
+
+	resp, errReq := http.Get(t.Url.String())
 	if errReq != nil {
 		return nil, fmt.Errorf("sendcommand get: %w", errReq)
 	}
