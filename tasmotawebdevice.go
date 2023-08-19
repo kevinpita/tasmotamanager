@@ -35,9 +35,7 @@ func NewWebDevice(deviceUrl string, username string, password string) (*TasmotaW
 }
 
 func (t *TasmotaWebDevice) SendCommand(c string) (map[string]string, error) {
-	q := t.Url.Query()
-	q.Set("cmnd", c)
-	t.Url.RawQuery = q.Encode()
+	t.command(c)
 
 	resp, errReq := http.Get(t.Url.String())
 	if errReq != nil {
@@ -57,4 +55,10 @@ func (t *TasmotaWebDevice) SendCommand(c string) (map[string]string, error) {
 	}
 
 	return result, nil
+}
+
+func (t *TasmotaWebDevice) command(c string) {
+	q := t.Url.Query()
+	q.Set("cmnd", c)
+	t.Url.RawQuery = q.Encode()
 }
