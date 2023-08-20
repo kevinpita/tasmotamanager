@@ -1,5 +1,4 @@
 name: Gosec
-
 on:
   push:
     branches:
@@ -7,7 +6,6 @@ on:
   pull_request:
     branches:
       - '**'
-
 jobs:
   Gosec:
     runs-on: ubuntu-latest
