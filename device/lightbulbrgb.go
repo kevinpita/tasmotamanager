@@ -14,19 +14,19 @@ func NewLightBulbRgb(d tasmotamanager.TasmotaDevice) *LightBulbRgb {
 	return &LightBulbRgb{d}
 }
 
-// On TODO: check response && log errors
+// On TODO: check response && log errors.
 func (lb *LightBulbRgb) On() bool {
 	_, errCommand := lb.SendCommand("Power on")
 	return errCommand == nil
 }
 
-// Off TODO: check response && log errors
+// Off TODO: check response && log errors.
 func (lb *LightBulbRgb) Off() bool {
 	_, errCommand := lb.SendCommand("Power off")
 	return errCommand == nil
 }
 
-// Bright TODO: check response && log errors
+// Bright TODO: check response && log errors.
 func (lb *LightBulbRgb) Bright(v int) bool {
 	if v > 100 || v < 0 {
 		return false
@@ -37,7 +37,7 @@ func (lb *LightBulbRgb) Bright(v int) bool {
 	return errCommand == nil
 }
 
-// ColorTemperature TODO: check response && log errors
+// ColorTemperature TODO: check response && log errors.
 func (lb *LightBulbRgb) ColorTemperature(v int) bool {
 	if v > 500 || v < 153 {
 		return false
@@ -48,7 +48,7 @@ func (lb *LightBulbRgb) ColorTemperature(v int) bool {
 	return errCommand == nil
 }
 
-// Saturation TODO: check response && log errors
+// Saturation TODO: check response && log errors.
 func (lb *LightBulbRgb) Saturation(v int) bool {
 	if v > 100 || v < 0 {
 		return false
@@ -59,7 +59,7 @@ func (lb *LightBulbRgb) Saturation(v int) bool {
 	return errCommand == nil
 }
 
-// Hue TODO: check response && log errors
+// Hue TODO: check response && log errors.
 func (lb *LightBulbRgb) Hue(v int) bool {
 	if v > 360 || v < 0 {
 		return false
