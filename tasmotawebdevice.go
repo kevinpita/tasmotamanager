@@ -1,25 +1,27 @@
 package tasmotamanager
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 type TasmotaWebDevice struct {
-	Url *url.URL
+	URL *url.URL
 }
 
-func NewWebDevice(deviceUrl string, username string, password string) (*TasmotaWebDevice, error) {
-	u, errParse := url.Parse(deviceUrl)
+func NewWebDevice(deviceURL string, username string, password string) (*TasmotaWebDevice, error) {
+	u, errParse := url.Parse(deviceURL)
 	if errParse != nil {
 		return nil, fmt.Errorf("newwebdevice parse: %w", errParse)
 	}
 
-	if !strings.HasSuffix(deviceUrl, "/") {
+	if !strings.HasSuffix(deviceURL, "/") {
 		u.Path += "/"
 	}
 	u.Path += "cm"
@@ -35,11 +37,22 @@ func NewWebDevice(deviceUrl string, username string, password string) (*TasmotaW
 }
 
 func (t *TasmotaWebDevice) SendCommand(c string) (map[string]string, error) {
-	t.prepareCommandUrl(c)
+	const timeout = 5
+	t.PrepareCommandURL(c)
 
-	resp, errReq := http.Get(t.Url.String())
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*timeout)
+	defer cancel()
+
+	req, errCtx := http.NewRequestWithContext(ctx, http.MethodGet, t.URL.String(), nil)
+	if errCtx != nil {
+		// TODO: Handle error
+		return nil, errCtx
+	}
+
+	resp, errReq := http.DefaultClient.Do(req)
 	if errReq != nil {
-		return nil, fmt.Errorf("sendcommand get: %w", errReq)
+		// TODO: Handle error
+		return nil, errReq
 	}
 	defer resp.Body.Close()
 
@@ -49,16 +62,16 @@ func (t *TasmotaWebDevice) SendCommand(c string) (map[string]string, error) {
 	}
 
 	var result map[string]string
-	errJson := json.Unmarshal(body, &result)
-	if errJson != nil {
-		return nil, fmt.Errorf("sendcommand unmarshal: %w", errJson)
+	errJSON := json.Unmarshal(body, &result)
+	if errJSON != nil {
+		return nil, fmt.Errorf("sendcommand unmarshal: %w", errJSON)
 	}
 
 	return result, nil
 }
 
-func (t *TasmotaWebDevice) prepareCommandUrl(c string) {
-	q := t.Url.Query()
+func (t *TasmotaWebDevice) PrepareCommandURL(c string) {
+	q := t.URL.Query()
 	q.Set("cmnd", c)
-	t.Url.RawQuery = q.Encode()
+	t.URL.RawQuery = q.Encode()
 }
