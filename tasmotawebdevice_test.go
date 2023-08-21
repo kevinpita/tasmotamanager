@@ -3,14 +3,14 @@ package tasmotamanager_test
 import (
 	"testing"
 
-	"github.com/kevinpita/tasmotamanager"
+	. "github.com/kevinpita/tasmotamanager"
 )
 
 // TODO: Tests should have a mock server that could give a json response so it can be compared too
 
 func TestNoLoginDeviceBackslash(t *testing.T) {
 	const expected = "http://192.168.1.2/cm?cmnd=Power+off"
-	device, errDevice := tasmotamanager.NewWebDevice("http://192.168.1.2/", "", "")
+	device, errDevice := NewWebDevice("http://192.168.1.2/", "", "")
 	if errDevice != nil {
 		t.Errorf("no error was expected when creating the device -> %v", errDevice)
 	}
@@ -25,7 +25,7 @@ func TestNoLoginDeviceBackslash(t *testing.T) {
 
 func TestNoLoginDeviceNoBackslash(t *testing.T) {
 	const expected = "http://192.168.1.2/cm?cmnd=Power+off"
-	device, errDevice := tasmotamanager.NewWebDevice("http://192.168.1.2", "", "")
+	device, errDevice := NewWebDevice("http://192.168.1.2", "", "")
 	if errDevice != nil {
 		t.Errorf("no error was expected when creating the device -> %v", errDevice)
 	}
@@ -40,7 +40,7 @@ func TestNoLoginDeviceNoBackslash(t *testing.T) {
 
 func TestLoginDeviceBackslash(t *testing.T) {
 	const expected = "http://192.168.1.2/cm?cmnd=Power+off&password=pass&user=admin"
-	device, errDevice := tasmotamanager.NewWebDevice("http://192.168.1.2/", "admin", "pass")
+	device, errDevice := NewWebDevice("http://192.168.1.2/", "admin", "pass")
 	if errDevice != nil {
 		t.Errorf("no error was expected when creating the device -> %v", errDevice)
 	}
@@ -55,7 +55,7 @@ func TestLoginDeviceBackslash(t *testing.T) {
 
 func TestLoginDeviceNoBackslash(t *testing.T) {
 	const expected = "http://192.168.1.2/cm?cmnd=Power+off&password=pass&user=admin"
-	device, errDevice := tasmotamanager.NewWebDevice("http://192.168.1.2", "admin", "pass")
+	device, errDevice := NewWebDevice("http://192.168.1.2", "admin", "pass")
 	if errDevice != nil {
 		t.Errorf("no error was expected when creating the device -> %v", errDevice)
 	}
