@@ -1,6 +1,10 @@
-package tasmotamanager
+package tasmotamanager_test
 
-import "testing"
+import (
+	"testing"
+
+	. "github.com/kevinpita/tasmotamanager"
+)
 
 // TODO: Tests should have a mock server that could give a json response so it can be compared too
 
@@ -11,8 +15,8 @@ func TestNoLoginDeviceBackslash(t *testing.T) {
 		t.Errorf("no error was expected when creating the device -> %v", errDevice)
 	}
 
-	device.prepareCommandUrl("Power off")
-	actual := device.Url.String()
+	device.PrepareCommandURL("Power off")
+	actual := device.URL.String()
 
 	if actual != expected {
 		t.Errorf("got %s expected %s", actual, expected)
@@ -26,8 +30,8 @@ func TestNoLoginDeviceNoBackslash(t *testing.T) {
 		t.Errorf("no error was expected when creating the device -> %v", errDevice)
 	}
 
-	device.prepareCommandUrl("Power off")
-	actual := device.Url.String()
+	device.PrepareCommandURL("Power off")
+	actual := device.URL.String()
 
 	if actual != expected {
 		t.Errorf("got %s expected %s", actual, expected)
@@ -41,8 +45,8 @@ func TestLoginDeviceBackslash(t *testing.T) {
 		t.Errorf("no error was expected when creating the device -> %v", errDevice)
 	}
 
-	device.prepareCommandUrl("Power off")
-	actual := device.Url.String()
+	device.PrepareCommandURL("Power off")
+	actual := device.URL.String()
 
 	if actual != expected {
 		t.Errorf("got %s expected %s", actual, expected)
@@ -56,8 +60,8 @@ func TestLoginDeviceNoBackslash(t *testing.T) {
 		t.Errorf("no error was expected when creating the device -> %v", errDevice)
 	}
 
-	device.prepareCommandUrl("Power off")
-	actual := device.Url.String()
+	device.PrepareCommandURL("Power off")
+	actual := device.URL.String()
 
 	if actual != expected {
 		t.Errorf("got %s expected %s", actual, expected)
