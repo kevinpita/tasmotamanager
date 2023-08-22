@@ -45,13 +45,13 @@ func (t *TasmotaWebDevice) SendCommand(c string) (map[string]string, error) {
 
 	req, errCtx := http.NewRequestWithContext(ctx, http.MethodGet, t.URL.String(), nil)
 	if errCtx != nil {
-		// TODO: Handle error
+		// TODO: Handle error.
 		return nil, errCtx
 	}
 
 	resp, errReq := http.DefaultClient.Do(req)
 	if errReq != nil {
-		// TODO: Handle error
+		// TODO: Handle error.
 		return nil, errReq
 	}
 	defer resp.Body.Close()

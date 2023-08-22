@@ -1,5 +1,5 @@
 package tasmotamanager
 
 type TasmotaDevice interface {
-	SendCommand(string) error
+	SendCommand(string) (map[string]string, error)
 }
