@@ -26,6 +26,24 @@ func (lb *LightBulbRgb) Off() bool {
 	return errCommand == nil
 }
 
+// Toggle TODO: check response && log errors.
+func (lb *LightBulbRgb) Toggle() bool {
+	_, errCommand := lb.SendCommand("Power toggle")
+	return errCommand == nil
+}
+
+// Blink TODO: check response && log errors.
+func (lb *LightBulbRgb) Blink() bool {
+	_, errCommand := lb.SendCommand("Power blink")
+	return errCommand == nil
+}
+
+// StopBlink TODO: check response && log errors.
+func (lb *LightBulbRgb) StopBlink() bool {
+	_, errCommand := lb.SendCommand("Power blinkoff")
+	return errCommand == nil
+}
+
 // Bright TODO: check response && log errors.
 func (lb *LightBulbRgb) Bright(v int) bool {
 	if v > 100 || v < 0 {
